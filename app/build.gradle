@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+kapt {
+    correctErrorTypes = true
+}
+
+android {
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.kevinj1008.samplesearchimage"
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    compileOptions {
+        sourceCompatibility rootProject.ext.compileJavaVersion
+        targetCompatibility rootProject.ext.compileJavaVersion
+    }
+    kotlinOptions {
+        jvmTarget = rootProject.ext.compileJavaVersion.toString()
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(':Base')
+    implementation project(':LocalClient')
+    implementation project(':RemoteClient')
+    implementation project(':Widget')
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+}
