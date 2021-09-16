@@ -7,6 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+//This class need to be singleton, and we use Koin to create single for help
 class ApiManager : ApiProvider {
 
     private val searchImageService: SearchImageService
@@ -14,7 +15,10 @@ class ApiManager : ApiProvider {
     override fun searchImageService(): SearchImageService = searchImageService
 
     companion object {
-        private const val BASE_URL = "https://pixabay.com/api/"
+        private const val PROTOCOL = "https://"
+        private const val DOMAIN = "pixabay.com"
+//        private const val PATH = "api/"
+        private const val BASE_URL = PROTOCOL + DOMAIN
         private const val TIMEOUT = 10L
     }
 

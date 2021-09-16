@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface SearchImageService {
-    @GET
+    @GET("/api")
     suspend fun getImages(@Query("q") keyword: String): Response<SearchImagePOJO>
 
     @GET

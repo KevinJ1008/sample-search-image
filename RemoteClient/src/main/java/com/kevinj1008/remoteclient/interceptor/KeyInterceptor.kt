@@ -9,10 +9,13 @@ class KeyInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originRequest = chain.request()
         val newRequestBuilder = originRequest.newBuilder()
-        val originUrl = originRequest.url()
+        var originUrl = originRequest.url()
 
         if (BuildConfig.PIXABAY_KEY.isNotEmpty()) {
-            originUrl.newBuilder().addQueryParameter(KEY, BuildConfig.PIXABAY_KEY)
+            originUrl = originUrl
+                .newBuilder()
+                .addQueryParameter(KEY, BuildConfig.PIXABAY_KEY)
+                .build()
         }
 
         val newRequest = newRequestBuilder.url(originUrl).build()
