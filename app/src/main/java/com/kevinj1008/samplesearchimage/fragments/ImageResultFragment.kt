@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.kevinj1008.base.base.BaseFragment
 import com.kevinj1008.samplesearchimage.controller.ImageResultEpoxyController
 import com.kevinj1008.samplesearchimage.databinding.FragmentSearchResultBinding
 import com.kevinj1008.samplesearchimage.viewmodel.SearchImageViewModel
+import com.kevinj1008.widget.listeners.LoadMoreListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
@@ -48,7 +50,32 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
     }
 
     private fun initViewSetting() {
-        binding?.recyclerview?.setController(epoxyController)
+        //TODO: get displayMode from args
+        val spanCount = 1
+        val layoutManager = GridLayoutManager(requireContext(), spanCount)
+        epoxyController.spanCount = spanCount
+        layoutManager.spanSizeLookup = epoxyController.spanSizeLookup
+        binding?.recyclerview?.apply {
+            this.layoutManager = layoutManager
+            this.setController(epoxyController)
+            val loadMoreListener = object : LoadMoreListener(layoutManager) {
+                override var visibleThreshold: Int = 10
+
+                override fun fetchNextPage() {
+                    epoxyController.isLoading = true
+                    //TODO: fetch next page
+                }
+
+                override fun isLoading(): Boolean {
+                    return epoxyController.isLoading
+                }
+            }
+            this.addOnScrollListener(loadMoreListener)
+        }
+        binding?.btnDisplayMode?.setOnClickListener {
+            //TODO: set span count
+            layoutManager.spanCount = if (layoutManager.spanCount == 1) 2 else 1
+        }
     }
 
     private fun registerObservers() {
@@ -65,6 +92,7 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
             it.getContentIfNotHandled()?.apply {
                 Log.d("ImageResultFragment", "error is: $it")
                 //TODO: complete error view handle
+                epoxyController.isLoading = false
             }
         })
     }

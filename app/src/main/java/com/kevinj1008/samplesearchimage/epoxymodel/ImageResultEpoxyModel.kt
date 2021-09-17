@@ -20,6 +20,7 @@ abstract class ImageResultEpoxyModel : EpoxyModelWithHolder<ImageResultEpoxyMode
 
     override fun bind(holder: ViewHolder) {
         super.bind(holder)
+        //TODO: fix image scale size when change span size
         holder.image.loadImage(imageUrl, 0)
     }
 

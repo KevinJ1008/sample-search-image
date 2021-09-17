@@ -1,5 +1,6 @@
 package com.kevinj1008.widget.listeners
 
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -46,6 +47,9 @@ abstract class LoadMoreListener(private val layoutManager: RecyclerView.LayoutMa
     private fun getLastVisibleItemPosition(): Int {
         return when (layoutManager) {
             is LinearLayoutManager -> {
+                layoutManager.findLastVisibleItemPosition()
+            }
+            is GridLayoutManager -> {
                 layoutManager.findLastVisibleItemPosition()
             }
             else -> {
