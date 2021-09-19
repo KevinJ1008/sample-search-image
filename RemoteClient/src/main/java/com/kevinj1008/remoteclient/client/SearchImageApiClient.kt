@@ -19,6 +19,9 @@ class SearchImageApiClient(
                 is ApiModel.SearchImage -> {
                     searchImageService.getImages(searchData.keyword)
                 }
+                is ApiModel.FetchPage -> {
+                    searchImageService.fetchNextPage(searchData.keyword, searchData.page)
+                }
             }
         } else {
             null

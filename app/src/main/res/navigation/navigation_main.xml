@@ -29,7 +29,8 @@
             app:nullable="false"/>
         <argument
             android:name="displayMode"
-            app:argType="string"
-            app:nullable="true"/>
+            app:argType="com.kevinj1008.samplesearchimage.entity.DisplayMode"
+            android:defaultValue="LIST"
+            app:nullable="false"/>
     </fragment>
 </navigation>

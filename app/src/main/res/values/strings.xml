@@ -3,4 +3,6 @@
     <string name="input_search">Search</string>
     <string name="input_keyword_hint">Enter keyword</string>
     <string name="empty_input_toast">You need to enter a character at least</string>
+    <string name="swap_list">Swap to List</string>
+    <string name="swap_grid">Swap to Grid</string>
 </resources>

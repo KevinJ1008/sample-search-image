@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.kevinj1008.base.interfaces.BaseContract
 import com.kevinj1008.base.interfaces.ErrorCallback
 import com.kevinj1008.base.BuildConfig
+import com.kevinj1008.base.R
 import com.kevinj1008.base.utils.APIException
 import com.kevinj1008.base.utils.ExceptionStatus
 import com.kevinj1008.base.utils.Result
@@ -72,22 +74,22 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment(), BaseContract, ErrorCa
      * we could pass response message to custom exception and let this mechanism to get message to show
      */
     override fun handleError(error: Result.Error, callback: ErrorCallback?) {
-//        when (error.exception) {
-//            is APIException -> handleCustomError(exception = error.exception,
-//                isFetching = error.isFetching, callback = callback)
-//            else -> {
-//                if (error.isFetching) {
-//                    Snackbar.make(requireView(), error.exception.message.toString(),
-//                        Snackbar.LENGTH_SHORT).show()
-//                } else {
-//                    callback?.showCustomErrorView(error.exception.message)
-//                }
-//            }
-//        }
+        when (error.exception) {
+            is APIException -> handleCustomError(exception = error.exception,
+                isFetching = error.isFetching, callback = callback)
+            else -> {
+                if (error.isFetching) {
+                    Snackbar.make(requireView(), error.exception.message.toString(),
+                        Snackbar.LENGTH_SHORT).show()
+                } else {
+                    callback?.showCustomErrorView(error.exception.message)
+                }
+            }
+        }
     }
 
     /**
-     * For those fragment which want to handle error by itself
+     * For those fragment/activity which want to handle error view by itself
      */
     override fun showCustomErrorView(message: String?, exceptionStatus: ExceptionStatus?) {
     }
@@ -96,30 +98,22 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment(), BaseContract, ErrorCa
      * Handle APIException status we defined in project
      */
     private fun handleCustomError(exception: APIException, isFetching: Boolean, callback: ErrorCallback?) {
-//        when (exception.exceptionStatus) {
-//            is ExceptionStatus.INCOMPLETE_RESULT_ERROR -> {
-//                if (isFetching) {
-//                    Snackbar.make(requireView(), R.string.incomplete_result_error,
-//                        Snackbar.LENGTH_SHORT).show()
-//                } else {
-//                    callback?.showCustomErrorView(activity?.getString(R.string.incomplete_result_error))
-//                }
-//            }
-//            is ExceptionStatus.NO_DATA_ERROR -> {
-//                callback?.showCustomErrorView(activity?.getString(R.string.empty_view_no_result),
-//                    exceptionStatus = exception.exceptionStatus)
-//            }
-//            is ExceptionStatus.CUSTOM_ERROR,
-//            ExceptionStatus.UNKNOWN_ERROR -> {
-//                if (isFetching) {
-//                    Snackbar.make(requireView(), exception.exceptionStatus.message.toString(),
-//                        Snackbar.LENGTH_SHORT).show()
-//                } else {
-//                    callback?.showCustomErrorView(exception.exceptionStatus.message)
-//                }
-//            }
-//            //if extend more custom error, just add condition to here, or if we need mechanism handle
-//            //by Activity, we could copy this mechanism to BaseActivity, and use activity to call method
-//        }
+        when (exception.exceptionStatus) {
+            is ExceptionStatus.NO_DATA_ERROR -> {
+                callback?.showCustomErrorView(activity?.getString(R.string.empty_view_no_result),
+                    exceptionStatus = exception.exceptionStatus)
+            }
+            is ExceptionStatus.CUSTOM_ERROR,
+            ExceptionStatus.UNKNOWN_ERROR -> {
+                if (isFetching) {
+                    Snackbar.make(requireView(), exception.exceptionStatus.message.toString(),
+                        Snackbar.LENGTH_SHORT).show()
+                } else {
+                    callback?.showCustomErrorView(exception.exceptionStatus.message)
+                }
+            }
+            //if extend more custom error, just add condition to here, or if we need mechanism handle
+            //by Activity, we could copy this mechanism to BaseActivity, and use activity to call method
+        }
     }
 }

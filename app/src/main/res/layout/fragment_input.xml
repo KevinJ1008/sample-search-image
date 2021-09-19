@@ -7,7 +7,7 @@
     android:id="@+id/layout_keyword_container"
     tools:ignore="SpUsage">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edit_input_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +20,7 @@
         android:textSize="24dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
+        android:completionThreshold="1"
         app:layout_constraintBottom_toTopOf="@+id/btn_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

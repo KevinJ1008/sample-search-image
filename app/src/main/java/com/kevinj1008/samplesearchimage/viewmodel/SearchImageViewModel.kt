@@ -7,7 +7,7 @@ import com.kevinj1008.base.utils.Event
 import com.kevinj1008.base.utils.Result
 import com.kevinj1008.base.utils.toLiveData
 import com.kevinj1008.samplesearchimage.entity.ImageEntity
-import com.kevinj1008.samplesearchimage.usecase.SearchImageUseCase
+import com.kevinj1008.samplesearchimage.usecase.searchimage.SearchImageUseCase
 import kotlinx.coroutines.launch
 
 class SearchImageViewModel(
@@ -26,6 +26,14 @@ class SearchImageViewModel(
         _isLoading.setValueWithSync(Event(content = true))
         viewModelScope.launch {
             val result = searchImageUseCase.getImages(keyword = keyword)
+            handleResult(result)
+        }
+    }
+
+    fun fetchNextPage(keyword: String, page: String) {
+        _isLoading.setValueWithSync(Event(content = true))
+        viewModelScope.launch {
+            val result = searchImageUseCase.fetchNextPage(keyword = keyword, page = page)
             handleResult(result)
         }
     }

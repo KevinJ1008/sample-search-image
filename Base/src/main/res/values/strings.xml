@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_view_no_result">No result is satisfied, please back to search again</string>
+</resources>
