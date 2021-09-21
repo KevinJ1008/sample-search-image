@@ -18,7 +18,6 @@ import com.kevinj1008.samplesearchimage.R
 import com.kevinj1008.samplesearchimage.databinding.FragmentInputBinding
 import com.kevinj1008.samplesearchimage.entity.DisplayMode
 import com.kevinj1008.samplesearchimage.viewmodel.InputViewModel
-import com.kevinj1008.samplesearchimage.viewmodel.SearchImageViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InputFragment : BaseFragment<FragmentInputBinding>() {
@@ -36,6 +35,7 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
         super.onViewCreated(view, savedInstanceState)
         registerObserver()
         viewModel.getDisplayMode()
+        viewModel.getSearchHistory()
         initView()
     }
 
@@ -70,6 +70,7 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
             displayMode = displayMode)
         findNavController().navigate(action)
         //TODO: save keyword to db, limit to 10 words, if we have 10, just delete the oldest and add new one
+        viewModel.saveSearchHistory(keyword)
     }
 
     private fun shouldShowEmptyHint(keyword: String): Boolean {
@@ -87,26 +88,15 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
                 displayMode = this
             }
         })
+        viewModel.searchHistory.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                //set spinner
+                initSpinner(it)
+            }
+        })
     }
 
     private fun initEditText() {
-        //TODO: get keyword from db
-//        val mockList = listOf("yellow", "red", "green", "Orange", "blue", "purple", "black", "white", "violet", "gray")
-//        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_expandable_list_item_1, mockList)
-//        binding?.editInputName?.setAdapter(adapter)
-//        binding?.editInputName?.setOnFocusChangeListener { view, hasFocus ->
-//            if (!hasFocus) {
-//                binding?.editInputName?.dismissDropDown()
-//            }
-//        }
-//        binding?.editInputName?.setOnClickListener {
-//            binding?.editInputName?.showDropDown()
-//        }
-//        binding?.editInputName?.setOnItemClickListener { parent, view, position, id ->
-//            (view as? TextView)?.apply {
-//                goSearchImage(keyword = this.text.toString())
-//            }
-//        }
         binding?.editInputName?.setOnEditorActionListener { view, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 (KeyEvent.ACTION_DOWN == event?.action
@@ -123,5 +113,24 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
             }
             return@setOnEditorActionListener false
         }
+    }
+
+    private fun initSpinner(list: List<String>) {
+        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_expandable_list_item_1, list)
+        binding?.editInputName?.setAdapter(adapter)
+        binding?.editInputName?.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
+                binding?.editInputName?.dismissDropDown()
+            }
+        }
+        binding?.editInputName?.setOnClickListener {
+            binding?.editInputName?.showDropDown()
+        }
+        binding?.editInputName?.setOnItemClickListener { parent, view, position, id ->
+            (view as? TextView)?.apply {
+                goSearchImage(keyword = this.text.toString())
+            }
+        }
+        //TODO: textChange empty to show spinner?
     }
 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 
 class SearchImageUseCaseImpl(
     private val searchImageRepository: SearchImageRepository
-    ) : SearchImageUseCase {
+) : SearchImageUseCase {
 
     override suspend fun getImages(keyword: String): Result<List<ImageEntity>>
     = withContext(Dispatchers.IO) {

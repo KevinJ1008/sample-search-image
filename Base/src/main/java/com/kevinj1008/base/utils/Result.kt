@@ -11,6 +11,12 @@ class APIException(val exceptionStatus: ExceptionStatus, val errorCode: Int? = n
     }
 }
 
+class CustomIOException(val exceptionStatus: ExceptionStatus) : Exception() {
+    override fun toString(): String {
+        return exceptionStatus.message.toString()
+    }
+}
+
 sealed class ExceptionStatus(val message: String?) {
     object NO_DATA_ERROR : ExceptionStatus("No data error")
     object UNKNOWN_ERROR : ExceptionStatus("Unknown error occurred, please try again later")

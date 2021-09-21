@@ -17,7 +17,6 @@ class ApiManager : ApiProvider {
     companion object {
         private const val PROTOCOL = "https://"
         private const val DOMAIN = "pixabay.com"
-//        private const val PATH = "api/"
         private const val BASE_URL = PROTOCOL + DOMAIN
         private const val TIMEOUT = 10L
     }

@@ -14,7 +14,7 @@ import java.lang.Exception
 
 class SearchImageRepositoryImpl(
     private val remoteDataSource: RemoteDataSource<Response<SearchImagePOJO>>
-    ) : SearchImageRepository {
+) : SearchImageRepository {
 
     override suspend fun searchImages(key: ApiModel): Result<List<ImageResultPOJO>>
     = withContext(Dispatchers.IO) {

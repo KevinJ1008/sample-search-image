@@ -1,5 +1,12 @@
 package com.kevinj1008.samplesearchimage.di
 
+import com.kevinj1008.localclient.DatabaseProvider
+import com.kevinj1008.localclient.client.LocalClient
+import com.kevinj1008.localclient.client.SearchHistoryLocalClient
+import com.kevinj1008.localclient.datasource.LocalDataSource
+import com.kevinj1008.localclient.datasource.SearchHistoryLocalDataSource
+import com.kevinj1008.localclient.AppDatabase
+import com.kevinj1008.localclient.pojo.SearchHistoryPOJO
 import com.kevinj1008.remoteclient.ApiManager
 import com.kevinj1008.remoteclient.ApiProvider
 import com.kevinj1008.remoteclient.client.ApiClient
@@ -20,6 +27,7 @@ import com.kevinj1008.samplesearchimage.usecase.searchimage.SearchImageUseCase
 import com.kevinj1008.samplesearchimage.usecase.searchimage.SearchImageUseCaseImpl
 import com.kevinj1008.samplesearchimage.viewmodel.InputViewModel
 import com.kevinj1008.samplesearchimage.viewmodel.SearchImageViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -27,16 +35,21 @@ import retrofit2.Response
 
 val sourceModule = module {
     single<ApiProvider> { ApiManager() }
+    single<AppDatabase> { DatabaseProvider(androidApplication()) }
 }
 
-private val SEARCH_IMAGE = "search_image"
-private val DISPLAY_MODE = "display_mode"
 val apiClientModule = module {
     factory<ApiClient<Response<SearchImagePOJO>>>(named(SEARCH_IMAGE)) {
         SearchImageApiClient(get<ApiProvider>().searchImageService())
     }
     factory<ApiClient<Response<DisplayModePOJO>>>(named(DISPLAY_MODE)) {
         DisplayModeApiClient()
+    }
+}
+
+val localClientModule = module {
+    factory<LocalClient<List<SearchHistoryPOJO>>>(named(SEARCH_HISTORY)) {
+        SearchHistoryLocalClient(get<AppDatabase>().searchHistoryDao())
     }
 }
 
@@ -49,12 +62,18 @@ val remoteDataSourceModule = module {
     }
 }
 
+val localDataSourceModule = module {
+    factory<LocalDataSource<List<SearchHistoryPOJO>>>(named(SEARCH_HISTORY)) {
+        SearchHistoryLocalDataSource(get(named(SEARCH_HISTORY)))
+    }
+}
+
 val repositoryModule = module {
     factory<SearchImageRepository> {
         SearchImageRepositoryImpl(get(named(SEARCH_IMAGE)))
     }
     factory<InputRepository> {
-        InputRepositoryImpl(get(named(DISPLAY_MODE)))
+        InputRepositoryImpl(get(named(DISPLAY_MODE)), get(named(SEARCH_HISTORY)))
     }
 }
 

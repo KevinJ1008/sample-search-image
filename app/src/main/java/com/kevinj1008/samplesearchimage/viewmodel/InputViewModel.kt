@@ -15,6 +15,9 @@ class InputViewModel(
     private val _displayMode = MutableLiveData<DisplayMode>()
     val displayMode = _displayMode.toLiveData()
 
+    private val _searchHistory = MutableLiveData<List<String>>()
+    val searchHistory = _searchHistory.toLiveData()
+
     fun getDisplayMode() {
         viewModelScope.launch {
             val result = useCase.getDisplayMode()
@@ -23,6 +26,23 @@ class InputViewModel(
             } else {
                 //We won't have error case in here base on our design
             }
+        }
+    }
+
+    fun getSearchHistory() {
+        viewModelScope.launch {
+            val result = useCase.getSearchHistory()
+            if (result is Result.Success) {
+                _searchHistory.setValueWithSync(result.data)
+            } else {
+                //not handle error case, just do nothing for spinner
+            }
+        }
+    }
+
+    fun saveSearchHistory(newKeyword: String) {
+        viewModelScope.launch {
+            useCase.saveSearchHistory(newKeyword = newKeyword)
         }
     }
 }

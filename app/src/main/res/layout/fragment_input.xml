@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/input_keyword_hint"
         android:importantForAutofill="no"
-        android:imeOptions="actionSearch"
+        android:imeOptions="actionSearch|flagForceAscii"
         android:inputType="text"
         android:textColor="?attr/colorOnSecondary"
         android:textColorHint="@color/colorAccent"
