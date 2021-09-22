@@ -6,7 +6,7 @@ import com.kevinj1008.localclient.pojo.SearchHistoryPOJO
 @Dao
 interface SearchHistoryDao {
 
-    @Query("SELECT * FROM `search_history`")
+    @Query("SELECT * FROM `search_history` ORDER BY created_time DESC")
     suspend fun getSearchHistories(): List<SearchHistoryPOJO>
 
     @Delete

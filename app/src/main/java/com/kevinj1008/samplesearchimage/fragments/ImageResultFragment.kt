@@ -38,14 +38,17 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
         if (savedInstanceState == null) {
             viewModel.searchImage(keyword = args.keyword)
         } else {
+            page = savedInstanceState.getInt(KEY_PAGE, 0)
             epoxyController.onRestoreInstanceState(savedInstanceState)
             epoxyController.requestModelBuild()
+            if (binding?.btnDisplayMode?.isVisible == false) binding?.btnDisplayMode?.isVisible = true
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(KEY_SPAN_COUNT, spanCount)
+        outState.putInt(KEY_PAGE, page)
         epoxyController.onSaveInstanceState(outState = outState)
     }
 
@@ -82,7 +85,7 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
             this.layoutManager = layoutManager
             this.setController(epoxyController)
             val loadMoreListener = object : LoadMoreListener(layoutManager) {
-                override var visibleThreshold: Int = 5
+                override var visibleThreshold: Int = 10
 
                 override fun fetchNextPage() {
                     epoxyController.isLoading = true
@@ -112,6 +115,7 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
                 DisplayMode.LIST.value
             }
             layoutManager.spanCount = spanCount
+            binding?.recyclerview?.invalidateItemDecorations()
         }
     }
 
@@ -119,6 +123,7 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
         viewModel.imageList.observe(viewLifecycleOwner, {
             ++page
             epoxyController.setImages(it)
+            if (binding?.btnDisplayMode?.isVisible == false) binding?.btnDisplayMode?.isVisible = true
         })
         viewModel.isLoading.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.apply {
@@ -146,5 +151,6 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
 
     companion object {
         private const val KEY_SPAN_COUNT = "span_count"
+        private const val KEY_PAGE = "key_page"
     }
 }

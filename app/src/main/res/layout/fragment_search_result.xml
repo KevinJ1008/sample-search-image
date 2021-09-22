@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="12dp"
         android:textAllCaps="false"
+        android:visibility="gone"
         tools:text="@string/swap_list"/>
 
     <com.airbnb.epoxy.EpoxyRecyclerView

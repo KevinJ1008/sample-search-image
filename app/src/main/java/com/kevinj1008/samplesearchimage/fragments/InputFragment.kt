@@ -52,9 +52,6 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
     private fun initView() {
         binding?.btnInput?.setOnClickListener {
             val keyword = binding?.editInputName?.text?.toString() ?: ""
-            if (shouldShowEmptyHint(keyword = keyword)) {
-                return@setOnClickListener
-            }
             goSearchImage(keyword = keyword)
         }
         binding?.layoutKeywordContainer?.setOnClickListener {
@@ -65,16 +62,19 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
 
     private fun goSearchImage(keyword: String) {
         hideKeyboard()
+        val searchWord = keyword.trim()
+        if (shouldShowEmptyHint(searchWord)) {
+            return
+        }
         val action = InputFragmentDirections.actionInputFragmentToImageResultFragment(
-            keyword = keyword,
+            keyword = searchWord,
             displayMode = displayMode)
         findNavController().navigate(action)
-        //TODO: save keyword to db, limit to 10 words, if we have 10, just delete the oldest and add new one
-        viewModel.saveSearchHistory(keyword)
+        viewModel.saveSearchHistory(searchWord)
     }
 
     private fun shouldShowEmptyHint(keyword: String): Boolean {
-        return if (keyword.trim().isEmpty()) {
+        return if (keyword.isEmpty()) {
             Snackbar.make(requireView(), R.string.empty_input_toast, Snackbar.LENGTH_SHORT).show()
             true
         } else {
@@ -104,9 +104,6 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
                         && 0 == event.repeatCount)
             ) {
                 (view as? EditText)?.apply {
-                    if (shouldShowEmptyHint(this.text.toString())) {
-                        return@setOnEditorActionListener false
-                    }
                     goSearchImage(keyword = this.text.toString())
                 }
                 return@setOnEditorActionListener true
