@@ -8,6 +8,7 @@ Implement `Pixabay`'s `Search Image` API sample practice, and present in Recycle
   * `LocalClient`: Provide base local client interface and store all DB or related local client classes.
   * `RemoteClient`: Store all related remote data source classes.
   * `Widget`: Custom view related.
+  * `TestCore`: Support baset test and provided test lib to prevent imort test lib dependently.
   * `app`: Implement main businees logic, including `View`, `ViewModel`, `Repository` and related `UseCase` classes.
   
 * Apply libraries:
@@ -17,3 +18,4 @@ Implement `Pixabay`'s `Search Image` API sample practice, and present in Recycle
   * ImageLoader: `Glide`
   * Android Jetpack: `LiveData`, `ViewModel`, `Room`, `Navigation`
   * Request: `Retrofit`
+  * Unit Test: `JUnit`, `MockK`, `Coroutine Test`
