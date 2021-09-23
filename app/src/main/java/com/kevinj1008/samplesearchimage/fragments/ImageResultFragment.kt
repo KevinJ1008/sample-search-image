@@ -22,7 +22,7 @@ class ImageResultFragment : BaseFragment<FragmentSearchResultBinding>() {
     private val viewModel: SearchImageViewModel by viewModel()
     private val args: ImageResultFragmentArgs by navArgs()
     private val epoxyController = ImageResultEpoxyController()
-    private var page: Int = 0
+    private var page: Int = 1
     private var layoutEmpty: EmptyView? = null
     private var spanCount = DisplayMode.LIST.value
 
