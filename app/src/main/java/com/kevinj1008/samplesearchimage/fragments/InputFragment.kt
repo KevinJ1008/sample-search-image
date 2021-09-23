@@ -1,15 +1,15 @@
 package com.kevinj1008.samplesearchimage.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.kevinj1008.base.base.BaseFragment
@@ -37,6 +37,17 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
         viewModel.getDisplayMode()
         viewModel.getSearchHistory()
         initView()
+        //Get ime height to prevent dialog overlap by keyboard
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            binding?.root?.setPaddingRelative(
+                binding?.root?.paddingStart ?: 0,
+                binding?.root?.paddingTop ?: 0,
+                binding?.root?.paddingEnd ?: 0,
+                imeHeight
+            )
+            insets
+        }
     }
 
     override fun onResume() {
@@ -110,6 +121,8 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
             }
             return@setOnEditorActionListener false
         }
+        //Fix EditText focus issue which recent Android version won't have focus after init view
+        binding?.editInputName?.requestFocus()
     }
 
     private fun initSpinner(list: List<String>) {
@@ -128,6 +141,5 @@ class InputFragment : BaseFragment<FragmentInputBinding>() {
                 goSearchImage(keyword = this.text.toString())
             }
         }
-        //TODO: textChange empty to show spinner?
     }
 }
