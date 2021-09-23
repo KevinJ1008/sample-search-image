@@ -22,7 +22,7 @@ class InputViewModel(
         viewModelScope.launch {
             val result = useCase.getDisplayMode()
             if (result is Result.Success) {
-                _displayMode.setValueWithSync(result.data)
+                _displayMode.value = result.data
             } else {
                 //We won't have error case in here base on our design
             }
@@ -33,7 +33,7 @@ class InputViewModel(
         viewModelScope.launch {
             val result = useCase.getSearchHistory()
             if (result is Result.Success) {
-                _searchHistory.setValueWithSync(result.data)
+                _searchHistory.value = result.data
             } else {
                 //not handle error case, just do nothing for spinner
             }

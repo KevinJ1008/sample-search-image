@@ -23,7 +23,7 @@ class SearchImageViewModel(
     val loadingError = _loadingError.toLiveData()
 
     fun searchImage(keyword: String) {
-        _isLoading.setValueWithSync(Event(content = true))
+        _isLoading.value = Event(content = true)
         viewModelScope.launch {
             val result = searchImageUseCase.getImages(keyword = keyword)
             handleResult(result)
@@ -31,7 +31,7 @@ class SearchImageViewModel(
     }
 
     fun fetchNextPage(keyword: String, page: String) {
-        _isLoading.setValueWithSync(Event(content = true))
+        _isLoading.value = Event(content = true)
         viewModelScope.launch {
             val result = searchImageUseCase.fetchNextPage(keyword = keyword, page = page)
             handleResult(result)
@@ -39,14 +39,14 @@ class SearchImageViewModel(
     }
 
     private fun handleResult(result: Result<List<ImageEntity>>) {
-        _isLoading.setValueWithSync(Event(content = false))
+        _isLoading.value = Event(content = false)
         when (result) {
             is Result.Success -> {
-                _imageList.setValueWithSync(result.data)
+                _imageList.value = result.data
             }
 
             is Result.Error -> {
-                _loadingError.setValueWithSync(Event(content = result))
+                _loadingError.value = Event(content = result)
             }
         }
     }
