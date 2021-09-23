@@ -21,7 +21,7 @@ android {
         if (project.rootProject.file('local.properties').exists()) {
             Properties properties = new Properties()
             properties.load(project.rootProject.file('local.properties').newDataInputStream()) // load local.properties
-            key = properties.getProperty('key')
+            key = properties.getProperty('key', "\"\"")
         }
 
         buildConfigField "String", "PIXABAY_KEY", key
