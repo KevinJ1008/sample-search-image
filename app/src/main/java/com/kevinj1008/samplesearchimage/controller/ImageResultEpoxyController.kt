@@ -7,6 +7,8 @@ import com.kevinj1008.samplesearchimage.epoxymodel.imageResult
 
 class ImageResultEpoxyController : EpoxyController() {
     var isLoading: Boolean = false
+    //TODO: Maybe could use paging lib to separate pages locally to optimize memory, but we only
+    // have string in here so it's quite OK
     private var imageList: ArrayList<ImageEntity> = arrayListOf()
 
     override fun buildModels() {
